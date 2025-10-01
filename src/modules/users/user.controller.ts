@@ -2,6 +2,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { UserService } from "./user.service.js";
 import type { CreateUserDto } from "./dtos/create-user.dto.js";
+import { ApiError } from "@/utils/errors/api-error.js";
 
 export class UserController {
     private readonly userService: UserService;
@@ -32,10 +33,10 @@ export class UserController {
     findById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            if (!id) throw new Error("User id is required");
+            if (!id) throw new ApiError(400, "error", "User id is required");
             const user = await this.userService.findById(id);
             if (!user) {
-                return res.status(404).json({ message: "User not found" });
+                throw new ApiError(404, "error", "User not found");
             }
             res.json(user);
         } catch (error) {
@@ -47,7 +48,7 @@ export class UserController {
         try {
             const { id } = req.params;
             const data: CreateUserDto = req.body;
-            if (!id) throw new Error("User id is required");
+            if (!id) throw new ApiError(400, "error", "User id is required");
             const updated = await this.userService.update(id, data);
             res.json(updated);
         } catch (error) {
@@ -58,7 +59,7 @@ export class UserController {
     delete = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            if (!id) throw new Error("User id is required");
+            if (!id) throw new ApiError(400, "error", "User id is required");
             await this.userService.delete(id);
             res.status(204).send();
         } catch (error) {

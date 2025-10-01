@@ -3,6 +3,7 @@ import type { Express } from "express";
 import cors from "cors";
 import { setupSwagger } from '@/utils/docs/swagger.js'
 import API_PREFIX from '@/config/api.js'
+import { errorHandler } from "@/middlewares/error.middleware.js";
 
 //rutas
 import userRoutes from '@/modules/users/user.route.js'
@@ -12,5 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(`${API_PREFIX}/users`, userRoutes)
 setupSwagger(app)
+
+app.use(errorHandler);
 
 export default app;
