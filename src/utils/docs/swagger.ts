@@ -11,6 +11,9 @@ const options = {
             description: "API RESTful para la gestión de usuarios con CRUD completo.",
             termsOfService: "http://example.com/terms",
         },
+        servers: [
+            { url: "http://localhost:3000/api/v1", description: "Local dev server" }
+        ]
     },
     apis: ["./src/modules/**/*.route.ts"],
 };
