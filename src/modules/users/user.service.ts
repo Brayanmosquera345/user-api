@@ -1,5 +1,8 @@
 import { UserRepository } from "./user.repository.js";
 import type { CreateUserDto } from "./dtos/create-user.dto.js";
+import { Prisma } from "@prisma/client";
+import { ApiError } from "@/utils/errors/api-error.js";
+import { handlePrismaError } from "@/utils/errors/prisma-error.helper.js";
 
 export class UserService {
     private readonly userRepository: UserRepository;
@@ -9,7 +12,11 @@ export class UserService {
     }
 
     async create(user: CreateUserDto) {
-        return await this.userRepository.create(user);
+        try {
+            return await this.userRepository.create(user);
+        } catch (error) {
+            handlePrismaError(error);
+        }
     }
 
     async findAll() {
@@ -17,14 +24,27 @@ export class UserService {
     }
 
     async findById(id: string) {
-        return await this.userRepository.findById(id);
+        try {
+            return await this.userRepository.findById(id);
+        } catch (error) {
+            handlePrismaError(error, "User");
+        }
     }
 
     async update(id: string, user: CreateUserDto) {
-        return await this.userRepository.update(id, user);
+        try {
+            return await this.userRepository.update(id, user);
+        } catch (error) {
+            handlePrismaError(error);
+        }
     }
 
     async delete(id: string) {
-        return await this.userRepository.delete(id);
+        try {
+            return await this.userRepository.delete(id);
+        } catch (error) {
+            handlePrismaError(error, "User");
+
+        }
     }
 }

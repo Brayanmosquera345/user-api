@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { UserController } from "./user.controller.js";
+import { CreateUserSchema } from "./dtos/create-user.dto.js";
+import { validate } from "@/middlewares/validate.middleware.js";
 
 const router: Router = Router();
 const userController = new UserController();
@@ -64,7 +66,7 @@ const userController = new UserController();
  *       422:
  *         description: Validation error
  */
-router.post("/", userController.create);
+router.post("/", validate(CreateUserSchema), userController.create);
 
 /**
  * @swagger
@@ -138,7 +140,7 @@ router.get("/:id", userController.findById);
  *       404:
  *         description: User not found
  */
-router.put("/:id", userController.update);
+router.put("/:id", validate(CreateUserSchema), userController.update);
 
 /**
  * @swagger
